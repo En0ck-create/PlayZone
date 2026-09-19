@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayZone - Play Free Games</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0d1117;color:#fff}
+header{background:#151b24;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:bold;color:#66e3ff}.nav a{color:#fff;text-decoration:none;margin-left:20px}
+.hero{text-align:center;padding:65px 20px;background:linear-gradient(135deg,#111827,#172554)}
+.hero h1{font-size:44px;margin:0 0 12px}.hero p{color:#b8c1d1;font-size:18px}
+.search{width:min(650px,90%);padding:15px;border-radius:10px;border:0;margin-top:20px;font-size:16px}
+.container{width:min(1100px,92%);margin:35px auto}.cats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+.cat{background:#1b2431;color:#fff;border:1px solid #303b4d;padding:10px 16px;border-radius:20px;cursor:pointer}.cat.active,.cat:hover{background:#66e3ff;color:#071018}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{background:#151b24;border:1px solid #273142;border-radius:14px;overflow:hidden}.thumb{height:140px;background:linear-gradient(135deg,#263248,#111827);display:flex;align-items:center;justify-content:center;font-size:55px}
+.info{padding:16px}.info h3{margin:0 0 7px}.info p{color:#aeb7c6;font-size:14px;min-height:38px}.play{display:inline-block;background:#66e3ff;color:#071018;text-decoration:none;font-weight:bold;padding:10px 18px;border-radius:8px}
+.submit{margin-top:45px;padding:28px;border-radius:15px;background:#151b24;text-align:center;border:1px solid #273142}.submit a{display:inline-block;margin-top:12px;background:#66e3ff;color:#071018;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold}
+footer{text-align:center;padding:35px;color:#7f8a9b}
+</style>
+</head>
+<body>
+<header><div class="logo">🎮 PlayZone</div><nav class="nav"><a href="index.html">Home</a><a href="submit.html">Submit Game</a><a href="admin.html">Admin</a></nav></header>
+<section class="hero"><h1>Play. Discover. Have Fun.</h1><p>Find free browser games and discover new games from developers.</p><input id="search" class="search" placeholder="Search games..."></section>
+<main class="container">
+<div class="cats"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="Action">Action</button><button class="cat" data-cat="Arcade">Arcade</button><button class="cat" data-cat="Puzzle">Puzzle</button></div>
+<div id="games" class="grid">
+<article class="card" data-name="Coin Clicker" data-cat="Arcade"><div class="thumb">🪙</div><div class="info"><h3>Coin Clicker</h3><p>Click as fast as you can and collect coins.</p><a class="play" href="game.html?game=coin">PLAY</a></div></article>
+<article class="card" data-name="Rocket Dodge" data-cat="Action"><div class="thumb">🚀</div><div class="info"><h3>Rocket Dodge</h3><p>Dodge obstacles and survive as long as possible.</p><a class="play" href="game.html?game=rocket">PLAY</a></div></article>
+<article class="card" data-name="Number Guess" data-cat="Puzzle"><div class="thumb">🔢</div><div class="info"><h3>Number Guess</h3><p>Can you guess the hidden number?</p><a class="play" href="game.html?game=number">PLAY</a></div></article>
+</div>
+<section class="submit"><h2>Have a game?</h2><p>Developers can submit their games for review. Approved games can appear on PlayZone.</p><a href="submit.html">Submit Your Game</a></section>
+</main>
+<footer>© 2026 PlayZone</footer>
+<script>
+const cards=[...document.querySelectorAll('.card')], search=document.querySelector('#search'), cats=[...document.querySelectorAll('.cat')];
+let category='All';
+function filter(){const q=search.value.toLowerCase();cards.forEach(c=>c.style.display=(category==='All'||c.dataset.cat===category)&&c.dataset.name.toLowerCase().includes(q)?'block':'none')}
+search.addEventListener('input',filter);cats.forEach(b=>b.addEventListener('click',()=>{cats.forEach(x=>x.classList.remove('active'));b.classList.add('active');category=b.dataset.cat;filter()}));
+</script>
+</body>
+</html>
