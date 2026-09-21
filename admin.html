@@ -1,7 +1,386 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>PlayZone Admin</title>
-<style>body{margin:0;background:#0d1117;color:#fff;font-family:Arial,sans-serif}header{padding:18px 7%;background:#151b24}a{color:#66e3ff;text-decoration:none}.box{width:min(900px,92%);margin:40px auto}.login,.game{background:#151b24;border:1px solid #273142;border-radius:14px;padding:22px;margin-bottom:18px}.game{display:flex;gap:18px;align-items:center}.thumb{width:110px;height:75px;background:#273142;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:35px;flex:none}button{padding:10px 15px;border:0;border-radius:8px;margin-right:8px;cursor:pointer}.approve{background:#66e3ff}.reject{background:#303846;color:#fff}.muted{color:#aeb7c6}@media(max-width:600px){.game{align-items:flex-start}.thumb{width:80px;height:60px}}</style></head>
-<body><header><a href="index.html">← PlayZone</a></header><main class="box"><h1>🔒 PlayZone Admin</h1><div class="login"><strong>Private admin area</strong><p class="muted">The real version will require your admin login. This page is currently only the design/template.</p></div>
-<div class="game"><div class="thumb">🚀</div><div><h2>Super Space Run</h2><p class="muted">Developer: Demo Developer • Action</p><p class="muted">Dodge asteroids and survive.</p><button class="approve">Approve</button><button class="reject">Reject</button></div></div>
-<div class="game"><div class="thumb">🏎️</div><div><h2>Speed Racer</h2><p class="muted">Developer: Demo Developer • Racing</p><p class="muted">Race to the finish line.</p><button class="approve">Approve</button><button class="reject">Reject</button></div></div>
-</main></body></html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayZone Admin</title>
+
+<style>
+body {
+  margin: 0;
+  background: #0d1117;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 18px 7%;
+  background: #151b24;
+}
+
+a {
+  color: #66e3ff;
+  text-decoration: none;
+}
+
+.box {
+  width: min(900px, 90%);
+  margin: 40px auto;
+  background: #151b24;
+  padding: 28px;
+  border-radius: 15px;
+  border: 1px solid #273142;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  background: #0d1117;
+  color: white;
+  border: 1px solid #374151;
+  border-radius: 8px;
+}
+
+button {
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.login {
+  background: #66e3ff;
+}
+
+.approve {
+  background: #4ade80;
+}
+
+.reject {
+  background: #f87171;
+}
+
+.logout {
+  background: #9ca3af;
+}
+
+.game {
+  background: #0d1117;
+  border: 1px solid #273142;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+.game img {
+  max-width: 180px;
+  border-radius: 8px;
+}
+
+.note {
+  color: #aeb7c6;
+}
+
+#adminArea {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <a href="index.html">← PlayZone</a>
+</header>
+
+<main class="box">
+
+<h1>PlayZone Admin</h1>
+
+<!-- LOGIN -->
+<div id="loginArea">
+
+  <p class="note">Admin login</p>
+
+  <label>Email</label>
+  <input type="email" id="email" placeholder="Admin email">
+
+  <label>Password</label>
+  <input type="password" id="password" placeholder="Admin password">
+
+  <button class="login" onclick="login()">Login</button>
+
+  <p id="loginMessage" class="note"></p>
+
+</div>
+
+
+<!-- ADMIN AREA -->
+<div id="adminArea">
+
+  <button class="logout" onclick="logout()">Log out</button>
+
+  <h2>Pending Games</h2>
+
+  <div id="games">
+    <p class="note">Loading submissions...</p>
+  </div>
+
+</div>
+
+</main>
+
+
+<script>
+
+const SUPABASE_URL =
+'https://eichffccmqnoqbssrnjb.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_Y3NMS5Ru6nXHA2R4hkjKlg_0bWxnDRT';
+
+
+let accessToken = null;
+
+
+/* LOGIN */
+
+async function login() {
+
+  const email =
+    document.getElementById('email').value.trim();
+
+  const password =
+    document.getElementById('password').value;
+
+  const message =
+    document.getElementById('loginMessage');
+
+  message.textContent = 'Logging in...';
+
+  try {
+
+    const response = await fetch(
+      `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+      {
+        method: 'POST',
+
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          email: email,
+          password: password
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error_description ||
+        data.msg ||
+        'Login failed.'
+      );
+    }
+
+    accessToken = data.access_token;
+
+    document.getElementById('loginArea').style.display = 'none';
+    document.getElementById('adminArea').style.display = 'block';
+
+    loadGames();
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      'Login failed. Check your email and password.';
+
+  }
+
+}
+
+
+/* LOAD PENDING GAMES */
+
+async function loadGames() {
+
+  const container =
+    document.getElementById('games');
+
+  container.innerHTML =
+    '<p class="note">Loading submissions...</p>';
+
+  try {
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/games?status=eq.pending&order=created_at.desc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    const games = await response.json();
+
+    if (games.length === 0) {
+
+      container.innerHTML =
+        '<p class="note">No pending games.</p>';
+
+      return;
+    }
+
+    container.innerHTML = '';
+
+    games.forEach(game => {
+
+      const div = document.createElement('div');
+
+      div.className = 'game';
+
+      div.innerHTML = `
+        <h3>${escapeHTML(game.game_name)}</h3>
+
+        <p>
+          <strong>Developer:</strong>
+          ${escapeHTML(game.developer_name)}
+        </p>
+
+        <p>
+          <strong>Category:</strong>
+          ${escapeHTML(game.category)}
+        </p>
+
+        <p>
+          <strong>Description:</strong>
+          ${escapeHTML(game.description)}
+        </p>
+
+        <p>
+          <strong>Game URL:</strong>
+          ${escapeHTML(game.game_url)}
+        </p>
+
+        ${
+          game.thumbnail_url
+          ? `<img src="${escapeHTML(game.thumbnail_url)}" alt="Game thumbnail">`
+          : ''
+        }
+
+        <br><br>
+
+        <button class="approve"
+          onclick="changeStatus(${game.id}, 'approved')">
+          Approve
+        </button>
+
+        <button class="reject"
+          onclick="changeStatus(${game.id}, 'rejected')">
+          Reject
+        </button>
+      `;
+
+      container.appendChild(div);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    container.innerHTML =
+      '<p class="note">Could not load submissions.</p>';
+
+  }
+
+}
+
+
+/* APPROVE OR REJECT */
+
+async function changeStatus(id, status) {
+
+  try {
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/games?id=eq.${id}`,
+      {
+        method: 'PATCH',
+
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({
+          status: status
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
+
+    loadGames();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert('Could not update the game.');
+
+  }
+
+}
+
+
+/* LOG OUT */
+
+function logout() {
+
+  accessToken = null;
+
+  document.getElementById('adminArea').style.display = 'none';
+  document.getElementById('loginArea').style.display = 'block';
+
+  document.getElementById('password').value = '';
+
+}
+
+
+/* SAFETY */
+
+function escapeHTML(value) {
+
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+}
+
+</script>
+
+</body>
+</html>
