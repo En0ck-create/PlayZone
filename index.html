@@ -3,41 +3,172 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlayZone - Play Free Games</title>
+<title>PlayZone - Retro Browser Games</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0d1117;color:#fff}
-header{background:#151b24;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5}
-.logo{font-size:25px;font-weight:bold;color:#66e3ff}.nav a{color:#fff;text-decoration:none;margin-left:20px}
-.hero{text-align:center;padding:65px 20px;background:linear-gradient(135deg,#111827,#172554)}
-.hero h1{font-size:44px;margin:0 0 12px}.hero p{color:#b8c1d1;font-size:18px}
-.search{width:min(650px,90%);padding:15px;border-radius:10px;border:0;margin-top:20px;font-size:16px}
-.container{width:min(1100px,92%);margin:35px auto}.cats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
-.cat{background:#1b2431;color:#fff;border:1px solid #303b4d;padding:10px 16px;border-radius:20px;cursor:pointer}.cat.active,.cat:hover{background:#66e3ff;color:#071018}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-.card{background:#151b24;border:1px solid #273142;border-radius:14px;overflow:hidden}.thumb{height:140px;background:linear-gradient(135deg,#263248,#111827);display:flex;align-items:center;justify-content:center;font-size:55px}
-.info{padding:16px}.info h3{margin:0 0 7px}.info p{color:#aeb7c6;font-size:14px;min-height:38px}.play{display:inline-block;background:#66e3ff;color:#071018;text-decoration:none;font-weight:bold;padding:10px 18px;border-radius:8px}
-.submit{margin-top:45px;padding:28px;border-radius:15px;background:#151b24;text-align:center;border:1px solid #273142}.submit a{display:inline-block;margin-top:12px;background:#66e3ff;color:#071018;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:bold}
-footer{text-align:center;padding:35px;color:#7f8a9b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,sans-serif;background:#070912;color:#fff}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.08;background-image:linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px);background-size:32px 32px}
+header{background:#0c1020;border-bottom:2px solid #252b45;padding:16px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px;position:sticky;top:0;z-index:10}
+.logo{font-size:28px;font-weight:1000;letter-spacing:1px}
+.logo span{color:#7cf7ff}
+nav a{color:#dbe2ff;text-decoration:none;margin-left:22px;font-weight:800}
+nav a:hover{color:#7cf7ff}
+.hero{text-align:center;padding:72px 20px 58px;background:radial-gradient(circle at 50% 10%,#27376a 0,#111832 35%,#070912 75%)}
+.badge{display:inline-block;padding:7px 12px;border:1px solid #3e4b78;border-radius:999px;color:#7cf7ff;background:#111a32;font-size:12px;font-weight:900;letter-spacing:1px}
+.hero h1{font-size:clamp(40px,7vw,72px);line-height:.95;margin:18px 0 15px;text-shadow:4px 4px 0 #181c31}
+.hero h1 span{color:#7cf7ff}
+.hero p{max-width:700px;margin:auto;color:#aeb8d4;font-size:18px;line-height:1.6}
+.search{width:min(680px,92%);padding:16px 18px;border-radius:12px;border:2px solid #303958;background:#0e1425;color:white;font-size:16px;margin-top:26px;outline:none}
+.search:focus{border-color:#7cf7ff;box-shadow:0 0 0 3px #7cf7ff22}
+.container{max-width:1200px;margin:auto;padding:42px 6%}
+.section-title{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:18px}
+.section-title h2{margin:0;font-size:28px}
+.section-title p{margin:0;color:#7f8aaa}
+.categories{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px}
+.categories button,.submit{padding:10px 15px;border:1px solid #303958;background:#11182a;color:#eaf0ff;border-radius:10px;cursor:pointer;font-weight:800}
+.categories button:hover,.categories button.active,.submit:hover{border-color:#7cf7ff;color:#7cf7ff;background:#14203a}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:18px}
+.card{background:linear-gradient(180deg,#11182a,#0d1220);border:1px solid #293451;border-radius:16px;padding:12px;overflow:hidden;box-shadow:0 8px 24px #0004}
+.card:hover{transform:translateY(-3px);border-color:#4b638f}
+.thumb{height:145px;border-radius:11px;display:grid;place-items:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#18274a,#111525)}
+.pixel-art{font-size:58px;filter:drop-shadow(4px 4px 0 #0008)}
+.card h3{margin:14px 4px 6px;font-size:19px}
+.card p{color:#9ca8c4;font-size:14px;line-height:1.5;margin:0 4px 13px;min-height:42px}
+.play{width:100%;padding:12px;border:0;border-radius:9px;background:#7cf7ff;color:#071017;font-weight:1000;cursor:pointer}
+.play:hover{filter:brightness(1.08)}
+.submitbox{margin-top:52px;text-align:center;padding:38px;background:linear-gradient(135deg,#111a31,#0c1220);border:1px solid #2b3857;border-radius:18px}
+.submitbox h2{margin:0 0 8px;font-size:30px}
+.submitbox p{color:#aeb8d4}
+.submit{display:inline-block;text-decoration:none;margin-top:10px}
+footer{text-align:center;padding:35px;color:#77829f;border-top:1px solid #20283d}
+#empty{display:none;text-align:center;color:#8d98b3;padding:45px}
+@media(max-width:650px){nav{display:none}.hero{padding-top:55px}.container{padding-left:4%;padding-right:4%}}
 </style>
 </head>
+
 <body>
-<header><div class="logo">🎮 PlayZone</div><nav class="nav"><a href="index.html">Home</a><a href="submit.html">Submit Game</a><a href="admin.html">Admin</a></nav></header>
-<section class="hero"><h1>Play. Discover. Have Fun.</h1><p>Find free browser games and discover new games from developers.</p><input id="search" class="search" placeholder="Search games..."></section>
-<main class="container">
-<div class="cats"><button class="cat active" data-cat="All">All</button><button class="cat" data-cat="Action">Action</button><button class="cat" data-cat="Arcade">Arcade</button><button class="cat" data-cat="Puzzle">Puzzle</button></div>
-<div id="games" class="grid">
-<article class="card" data-name="Coin Clicker" data-cat="Arcade"><div class="thumb">🪙</div><div class="info"><h3>Coin Clicker</h3><p>Click as fast as you can and collect coins.</p><a class="play" href="game.html?game=coin">PLAY</a></div></article>
-<article class="card" data-name="Rocket Dodge" data-cat="Action"><div class="thumb">🚀</div><div class="info"><h3>Rocket Dodge</h3><p>Dodge obstacles and survive as long as possible.</p><a class="play" href="game.html?game=rocket">PLAY</a></div></article>
-<article class="card" data-name="Number Guess" data-cat="Puzzle"><div class="thumb">🔢</div><div class="info"><h3>Number Guess</h3><p>Can you guess the hidden number?</p><a class="play" href="game.html?game=number">PLAY</a></div></article>
-</div>
-<section class="submit"><h2>Have a game?</h2><p>Developers can submit their games for review. Approved games can appear on PlayZone.</p><a href="submit.html">Submit Your Game</a></section>
+<header>
+  <div class="logo">PLAY<span>ZONE</span></div>
+  <nav>
+    <a href="#games">Games</a>
+    <a href="#submit">Submit Game</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="badge">ORIGINAL RETRO ADVENTURES</div>
+  <h1>Play. Discover. <span>Explore.</span></h1>
+  <p>Discover lightweight browser games with a classic pixel-platform adventure feel — original worlds, heroes, enemies and challenges.</p>
+  <input class="search" id="search" type="search" placeholder="🔎 Search games...">
+</section>
+
+<main class="container" id="games">
+  <div class="section-title">
+    <div>
+      <h2>Featured Games</h2>
+      <p id="gameCount">Showing all games</p>
+    </div>
+  </div>
+
+  <div class="categories" id="categories">
+    <button class="active" onclick="filterGames('all',this)">All</button>
+    <button onclick="filterGames('action',this)">Action</button>
+    <button onclick="filterGames('adventure',this)">Adventure</button>
+    <button onclick="filterGames('arcade',this)">Arcade</button>
+    <button onclick="filterGames('platformer',this)">Platformer</button>
+    <button onclick="filterGames('puzzle',this)">Puzzle</button>
+    <button onclick="filterGames('rpg',this)">RPG</button>
+  </div>
+
+  <div class="games" id="gameList">
+    <div class="card" data-category="platformer" data-name="Pixel Rune">
+      <div class="thumb"><div class="pixel-art">🧙</div></div>
+      <h3>Pixel Rune</h3>
+      <p>Run, jump, collect crystal runes and cross dangerous pixel worlds.</p>
+      <button class="play" onclick="playGame('Pixel Rune')">PLAY</button>
+    </div>
+
+    <div class="card" data-category="adventure" data-name="Rune Kingdom">
+      <div class="thumb"><div class="pixel-art">🏰</div></div>
+      <h3>Rune Kingdom</h3>
+      <p>Explore an original kingdom, find hidden paths and defeat guardians.</p>
+      <button class="play" onclick="playGame('Rune Kingdom')">PLAY</button>
+    </div>
+
+    <div class="card" data-category="action" data-name="Shadow Quest">
+      <div class="thumb"><div class="pixel-art">🗡️</div></div>
+      <h3>Shadow Quest</h3>
+      <p>Dash through dark ruins, avoid traps and face strange shadow creatures.</p>
+      <button class="play" onclick="playGame('Shadow Quest')">PLAY</button>
+    </div>
+
+    <div class="card" data-category="adventure" data-name="Dragon Valley">
+      <div class="thumb"><div class="pixel-art">🐉</div></div>
+      <h3>Dragon Valley</h3>
+      <p>Travel through a colorful valley and uncover the lost dragon relic.</p>
+      <button class="play" onclick="playGame('Dragon Valley')">PLAY</button>
+    </div>
+
+    <div class="card" data-category="arcade" data-name="Star Runner">
+      <div class="thumb"><div class="pixel-art">⭐</div></div>
+      <h3>Star Runner</h3>
+      <p>Jump between platforms, grab stars and race toward the finish gate.</p>
+      <button class="play" onclick="playGame('Star Runner')">PLAY</button>
+    </div>
+
+    <div class="card" data-category="puzzle" data-name="Crystal Caverns">
+      <div class="thumb"><div class="pixel-art">💎</div></div>
+      <h3>Crystal Caverns</h3>
+      <p>Solve simple path puzzles while exploring a glowing underground world.</p>
+      <button class="play" onclick="playGame('Crystal Caverns')">PLAY</button>
+    </div>
+  </div>
+
+  <div id="empty">No games found. Try another search or category.</div>
+
+  <section class="submitbox" id="submit">
+    <h2>Have a game?</h2>
+    <p>Want your game on PlayZone? Submit it here.</p>
+    <a class="submit" href="#">➕ Submit Your Game</a>
+  </section>
 </main>
-<footer>© 2026 PlayZone</footer>
+
+<footer>© 2026 PlayZone — Free Browser Games</footer>
+
 <script>
-const cards=[...document.querySelectorAll('.card')], search=document.querySelector('#search'), cats=[...document.querySelectorAll('.cat')];
-let category='All';
-function filter(){const q=search.value.toLowerCase();cards.forEach(c=>c.style.display=(category==='All'||c.dataset.cat===category)&&c.dataset.name.toLowerCase().includes(q)?'block':'none')}
-search.addEventListener('input',filter);cats.forEach(b=>b.addEventListener('click',()=>{cats.forEach(x=>x.classList.remove('active'));b.classList.add('active');category=b.dataset.cat;filter()}));
+function playGame(name){
+  alert(name + " — the game page will open here when the game system is connected.");
+}
+
+function filterGames(category,button){
+  document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
+
+  document.getElementById("search").value="";
+  let shown=0;
+  document.querySelectorAll(".card").forEach(card=>{
+    const show=category==="all" || card.dataset.category===category;
+    card.style.display=show?"block":"none";
+    if(show) shown++;
+  });
+  document.getElementById("gameCount").textContent=shown+" game"+(shown===1?"":"s")+" shown";
+  document.getElementById("empty").style.display=shown?"none":"block";
+}
+
+document.getElementById("search").addEventListener("input",function(){
+  const text=this.value.toLowerCase().trim();
+  let shown=0;
+  document.querySelectorAll(".card").forEach(card=>{
+    const show=card.dataset.name.toLowerCase().includes(text);
+    card.style.display=show?"block":"none";
+    if(show) shown++;
+  });
+  document.querySelectorAll(".categories button").forEach(b=>b.classList.remove("active"));
+  document.querySelector('.categories button').classList.add("active");
+  document.getElementById("gameCount").textContent=shown+" game"+(shown===1?"":"s")+" found";
+  document.getElementById("empty").style.display=shown?"none":"block";
+});
 </script>
 </body>
 </html>
